@@ -11,8 +11,8 @@ def filter_datum(fields, redaction, message, separator):
     specified fields in a log message using regular expression
     """
     for field in fields:
-        message = re.sub(r'(?<={}\{{)[^{}]*(?=\}})'.format(
-            re.escape(field), re.escape(separator)), redaction, message)
+        pattern = fr'(?<={re.escape(field)}=)[^{re.escape(separator)}]+'
+        message = re.sub(pattern, redaction, message)
     return message
 
 

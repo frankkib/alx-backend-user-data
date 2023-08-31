@@ -8,6 +8,7 @@ import csv
 import os
 import re
 from typing import List
+import mysql.connector
 
 
 class RedactingFormatter(logging.Formatter):
@@ -59,3 +60,25 @@ def filter_datum(fields, redaction, message, separator):
         pattern = fr'(?<={re.escape(field)}=)[^{re.escape(separator)}]+'
         message = re.sub(pattern, redaction, message)
     return message
+
+
+def get_db():
+    """
+    Connecting to MYSQL database using environment variables
+    """
+    db_username = os.getenv("PERSONAL_DATA_DB_USERNAME", "frank")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "frank")
+    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    if db_name is None:
+        raise ValueError("environment variable is not set")
+
+    db_connection = mysql.connector.connect(
+            user=db_username,
+            password=db_password,
+            host=db_host,
+            database=db_name,
+            port=3306
+            )
+    return db_connection

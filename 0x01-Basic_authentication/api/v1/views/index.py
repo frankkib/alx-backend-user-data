@@ -28,7 +28,12 @@ def stats() -> str:
 
 @app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
 def unauthorized_endpoint() -> str:
-    """GET /api/v1/abort
+    """GET /api/v1/unauthorized
     return 404 unauthorized
     """
-    return jsonify({"error": "Unauthorized"})
+    resource = get_resource()
+    if resource is None:
+        abort(404, description="Unauthorized")
+    return jsonify(resource)
+
+

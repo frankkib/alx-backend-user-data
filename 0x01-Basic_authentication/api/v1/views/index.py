@@ -35,5 +35,3 @@ def unauthorized_endpoint() -> str:
     if resource is None:
         abort(404, description="Unauthorized")
     return jsonify(resource)
-
-

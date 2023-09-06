@@ -31,7 +31,12 @@ def unauthorized_endpoint() -> str:
     """GET /api/v1/unauthorized
     return 404 unauthorized
     """
-    resource = get_resource()
-    if resource is None:
-        abort(404, description="Unauthorized")
-    return jsonify(resource)
+    abort(404, description="Unauthorized")
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden_endpoint() -> str:
+    """GET /api/v1/forbidden
+    return 403 forbidden
+    """
+    abort(403, description="Forbidden")

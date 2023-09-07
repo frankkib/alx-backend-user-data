@@ -22,7 +22,9 @@ if 'AUTH_TYPE' in os.environ:
     else:
         auth = Auth()
 
-exempted_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+exempted_paths = [
+        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+
 
 @app.before_request
 def before_request():

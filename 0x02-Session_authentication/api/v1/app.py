@@ -25,7 +25,16 @@ if 'AUTH_TYPE' in os.environ:
 
 @app.before_request
 def before_request():
-    """auth type"""
+    """Executes this function before processing each request"""
+    excluded_paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/', '/api/v1/auth_session/login/']
+    if request.path not in excluded_paths:
+        auth_header = auth.authorization_header(request)
+        session_cookie = auth.session_cookie(request)
+        if auth_header is None and session_cookie is None:
+            abort(401)
+
     request.current_user = auth.current_user(request)
 
 
@@ -40,11 +49,11 @@ def not_found(error) -> str:
 def unauthorized_error(error) -> str:
     """Unauthorized handler
     """
-    return jsonfy({"error": "Unauthorized"}), 401
+    return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_error(error):
+def forbidden_error(error) -> str:
     """forbidden error handler
     """
     return jsonify({"error": "Forbidden"})

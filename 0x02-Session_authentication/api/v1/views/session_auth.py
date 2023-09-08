@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""session module views
+"""session Authentication module
 """
 from api.v1.views import app_views
 from flask import abort, jsonify, request
@@ -9,8 +9,7 @@ from api.v1.app import auth
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login():
-    """
-    Requests a login form
+    """Authenticate a user via session-based authentication.
     """
     email = request.form.get("email")
     password = request.form.get("password")

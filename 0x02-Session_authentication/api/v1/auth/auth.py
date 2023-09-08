@@ -3,6 +3,7 @@
 """
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
@@ -31,3 +32,12 @@ class Auth:
         """Retrieves the current user based on request
         """
         return None
+
+    def session_cookie(self, request=None):
+        """Get the value of the session cookie from a request.
+        """
+        if request is None:
+            return None
+        cookie_name = os.environ.get("SESSION_NAME")
+        session_cookie_value = request.cookies.get(cookie_name)
+        return session_cookie_value

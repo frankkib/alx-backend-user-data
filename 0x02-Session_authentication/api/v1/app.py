@@ -27,7 +27,7 @@ if 'AUTH_TYPE' in os.environ:
 def before_request():
     """Executes this function before processing each request"""
     excluded_paths = [
-            '/api/v1/status/',
+            '/api/v1/status',
             '/api/v1/unauthorized/', '/api/v1/auth_session/login/']
     if request.path not in excluded_paths:
         auth_header = auth.authorization_header(request)

@@ -54,7 +54,7 @@ class Auth:
         Function that generates a unique id
         """
         new_id = uuid.uuid4()
-        retun=rn str(new_id)
+        return str(new_id)
 
 
 if __name__ == "__main__":

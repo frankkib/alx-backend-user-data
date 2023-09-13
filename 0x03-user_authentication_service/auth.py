@@ -56,6 +56,19 @@ class Auth:
         new_id = uuid.uuid4()
         return str(new_id)
 
+    def create_session(self, email: str) -> str:
+        """
+        Function that creates a session
+        """
+        try:
+            user =self._db.find_user_by(email=email)
+            new_session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=new_session_id)
+            return new_session_id
+        except Exception:
+            pass
+        return None
+
 
 if __name__ == "__main__":
     auth = Auth()

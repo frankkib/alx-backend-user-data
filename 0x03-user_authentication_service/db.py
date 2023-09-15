@@ -51,7 +51,7 @@ class DB:
         try:
             self._session.commit()
         except IntegrityError:
-            self._session.rallback()
+            self._session.rollback()
             raise Exception("user alreay exists")
         return new_user
 
@@ -62,6 +62,8 @@ class DB:
             if user is None:
                 raise NoResultFound("Not Found")
             return user
+        except NoResultFound as e:
+            raise e
         except InvalidRequestError as e:
             raise e
 

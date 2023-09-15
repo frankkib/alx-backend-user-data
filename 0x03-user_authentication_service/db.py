@@ -12,6 +12,7 @@ from user import Base
 from user import User
 import uuid
 
+
 def generate_session_id():
     """function for generating the unique id"""
     return str(uuid.uuid4())
@@ -43,12 +44,14 @@ class DB:
         Fundtion that adds a new user to the database
         """
         session_id = generate_session_id()
-        new_user = User(email=email, hashed_password=hashed_password, session_id=session_id)
+        new_user = User(
+                email=email,
+                hashed_password=hashed_password, session_id=session_id)
         self._session.add(new_user)
         try:
             self._session.commit()
         except IntegrityError:
-            #self._session.rallback()
+            self._session.rallback()
             raise Exception("user alreay exists")
         return new_user
 

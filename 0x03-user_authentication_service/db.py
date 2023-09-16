@@ -6,10 +6,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import InvalidRequestError, IntegrityError
 
 from user import Base
 from user import User
+import uuid
+
+def generate_session_id():
+    """function for generating the unique id"""
+    return str(uuid.uuid4())
 
 
 class DB:
@@ -37,9 +42,14 @@ class DB:
         """
         Fundtion that adds a new user to the database
         """
-        new_user = User(email=email, hashed_password=hashed_password)
+        session_id = generate_session_id()
+        new_user = User(email=email, hashed_password=hashed_password, session_id=session_id)
         self._session.add(new_user)
-        self._session.commit()
+        try:
+            self._session.commit()
+        except IntegrityError:
+            #self._session.rallback()
+            raise Exception("user alreay exists")
         return new_user
 
     def find_user_by(self, **kwargs):
@@ -50,7 +60,7 @@ class DB:
                 raise NoResultFound("Not Found")
             return user
         except InvalidRequestError as e:
-            raise InvalidRequestError("Invalid") from e
+            raise e
 
     def update_user(self, user_id, **kwargs):
         """Updates user details using the privided user_id
@@ -63,4 +73,4 @@ class DB:
         except NoResultFound:
             raise NoResultFound("No user found with the user_id")
         except InvalidRequestError as e:
-            raise InvalidRequestError("Invalid update arguments") from e
+            raise e
